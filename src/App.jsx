@@ -2,20 +2,24 @@ import { useState } from "react";
 
 function App() {
     const [toDo, setToDo] = useState("");
+    const [toDos, setTodos] = useState([]);
 
     const onChange = (event) => setToDo(event.target.value);
+
     const onSubmit = (event) => {
         event.preventDefault();
-        // console.log(toDo);
         if (toDo === "") {
             return;
         }
-        setTodos([...toDos, toDo]);
+        setTodos((currentArray) => [toDo, ...currentArray]);
         setToDo("");
     };
 
-    // 여러 개의 toDo를 저장할 수 있는 array 생성
-    const [toDos, setTodos] = useState([]);
+    const deleteToDo = (indexToTarget) => {
+        setTodos((currentArray) =>
+            currentArray.filter((_, index) => index !== indexToTarget)
+        );
+    };
 
     return (
         <div>
@@ -32,7 +36,10 @@ function App() {
             <hr />
             <ul>
                 {toDos.map((item, index) => (
-                    <li key={index}>{item}</li>
+                    <li key={index}>
+                        {item}
+                        <button onClick={() => deleteToDo(index)}>❌</button>
+                    </li>
                 ))}
             </ul>
         </div>
